@@ -34,38 +34,41 @@ header {
         grid-column: 1;
     }
 
-    header fluent-switch {
-        width: 9rem;
-    }
-
     header .colorgroup {
         grid-column: 3;
-        display: flex;
+        display: none;
         align-items: center;
     }
-    
-    header .switches {
+
+    header .profile {
+        color: var(--neutral-foreground-rest);
         grid-column: 4;
         justify-self: end;
         padding: 0 20px 0 0;
         display: flex;
-        align-items: center;
+        align-items: end;
     }
-
 
 footer {
     display: grid;
-    grid-template-columns: 10px auto auto 10px;
+    grid-template-columns: 10px auto auto;
     background: var(--neutral-layer-4);
     color: var(--neutral-foreground-rest);
     align-items: center;
     grid-area: footer;
     padding: 10px 10px;
 }
-
-    footer .version {
+    footer fluent-switch {
+        width: 9rem;
+    }
+    footer .switches {
         grid-column: 2;
-        justify-content: start;
+        display: flex;
+        align-items: start;
+    }
+    footer .version {
+        grid-column: 3;
+        justify-content: center;
     }
 
         footer .version a {
@@ -83,7 +86,7 @@ footer {
             }
 
     footer .copy {
-        grid-column: 3;
+        grid-column: 5;
         justify-self: end;
     }
 

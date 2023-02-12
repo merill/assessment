@@ -26,8 +26,8 @@
         </div>
         <div class="colorgroup">
             <label for="color">Color</label>
-            <FluentSelect Id="color" 
-                          Items=@(Enum.GetValues<OfficeColor>()) 
+            <FluentSelect Id="color"
+                          Items=@(Enum.GetValues<OfficeColor>())
                           OptionValue="@(c => c.ToAttributeValue())"
                           OptionSelected="@(c => c == _selectedColorOption)"
                           TOption="OfficeColor"
@@ -35,12 +35,8 @@
                           @bind-SelectedOption="@_selectedColorOption"
                           @onchange="@(x => HandleColorChange(x))" />
         </div>
-        <div class="switches">
-            <FluentSwitch @bind-Value="@_inDarkMode" @onchange=SwitchTheme title="Switch theme">
-                <span class="label">Theme</span>
-                <span slot="unchecked-message">light</span>
-                <span slot="checked-message">dark</span>
-            </FluentSwitch>
+        <div class="profile">
+            <LoginDisplay />
         </div>
     </header>
 
@@ -64,16 +60,23 @@
                 </ErrorBoundary>
             </article>
             <aside>
-                
+
             </aside>
         </div>
     </main>
     <footer>
+        <div class="switches">
+            <FluentSwitch @bind-Value="@_inDarkMode" @onchange=SwitchTheme title="Switch theme">
+                <span class="label">Theme</span>
+                <span slot="unchecked-message">light</span>
+                <span slot="checked-message">dark</span>
+            </FluentSwitch>
+        </div>
         <div class="version">
             <small>
                 Version: @_version
                 &nbsp;-&nbsp;
-                <a href="https://dotnet.microsoft.com/en-us/learn/aspnet/what-is-aspnet-core">Powered by @RuntimeInformation.FrameworkDescription</a>
+                Brought to you by Microsoft Identity CxP
             </small>
         </div>
         <div class="copy">

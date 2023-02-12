@@ -47,9 +47,7 @@ namespace Assessment.Web
         {
             _version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
-
-            OfficeColor[] colors = Enum.GetValues<OfficeColor>().ToArray();
-            _selectedColorOption = colors[new Random().Next(colors.Length)];
+            _selectedColorOption = OfficeColor.Visio;
 
             NavigationManager.LocationChanged += LocationChanged;
             base.OnInitialized();
@@ -101,7 +99,7 @@ namespace Assessment.Web
 
             GlobalState.SetLuminance(baseLayerLuminance);
 
-            await _jsModule!.InvokeVoidAsync("switchHighlightStyle", baseLayerLuminance == StandardLuminance.DarkMode);
+            //await _jsModule!.InvokeVoidAsync("switchHighlightStyle", baseLayerLuminance == StandardLuminance.DarkMode);
         }
 
         private void HandleChecked()
