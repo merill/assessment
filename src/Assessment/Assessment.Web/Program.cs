@@ -16,4 +16,16 @@ builder.Services.AddMsalAuthentication(options =>
     builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
 });
 
+var graphBaseUrl = string.Join("/",
+    builder.Configuration.GetSection("MicrosoftGraph")["BaseUrl"],
+    builder.Configuration.GetSection("MicrosoftGraph")["Version"]);
+var scopes = builder.Configuration.GetSection("MicrosoftGraph:Scopes")
+    .Get<List<string>>();
+
+builder.Services.AddGraphClient(graphBaseUrl, scopes);
+
+builder.Services.AddTransient<GraphAuthorizationMessageHandler>();
+builder.Services.AddHttpClient("GraphAPI", client => client.BaseAddress = new Uri(graphBaseUrl))
+    .AddHttpMessageHandler<GraphAuthorizationMessageHandler>();
+
 await builder.Build().RunAsync();

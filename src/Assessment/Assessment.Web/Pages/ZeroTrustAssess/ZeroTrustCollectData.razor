@@ -1,0 +1,41 @@
+﻿@page "/ZeroTrustCollectData"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject IConfiguration Config
+@inject IHttpClientFactory ClientFactory
+@using Microsoft.Graph;
+@attribute [Authorize]
+@inject GraphServiceClient Client
+@namespace Assessment.Web
+
+<PageTitle>Zero Trust Assessment</PageTitle>
+
+<h1>Zero Trust Assessment - Data Collection In Progress</h1>
+
+@if(isLoading)
+{
+    <p>Downloading configuration information for assessment...</p>
+    <div>
+        <div style="display: grid; grid-gap: 12px; grid-auto-flow: column;">
+            <FluentProgressRing style="width: 102px; height: 102px;"></FluentProgressRing>
+        </div>
+
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(user?.UserPrincipalName))
+{
+    <p>Mobile Phone: @user.UserPrincipalName</p>
+}
+
+@code {
+    private bool isLoading = true;
+    private Microsoft.Graph.User? user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var request = Client.Me.Request();
+        user = await request.GetAsync();
+        isLoading = false;
+    }
+}
