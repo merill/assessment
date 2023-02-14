@@ -3,13 +3,14 @@
 @inject IHttpClientFactory ClientFactory
 @attribute [Authorize]
 @namespace Assessment.Web
-@inject IZeroTrustDataService ZeroTrustDataService
+@using Assessment.Shared.ZeroTrust.Data
+@inject Assessment.Shared.ZeroTrust.IZeroTrustDataService ZeroTrustDataService
 
 <PageTitle>Zero Trust Assessment</PageTitle>
 
-<h1>Zero Trust Assessment - Data Collection In Progress</h1>
+<h1>Zero Trust Assessment</h1>
 
-@if(isLoading)
+@if (isLoading)
 {
     <p>Downloading configuration information for assessment...</p>
     <div>
@@ -21,32 +22,55 @@
 }
 else
 {
-    if(zeroTrustData == null)
+    if (zeroTrustData == null)
     {
-        <h3>An error occured. Please re-run assessment.</h3>
+        <h2>An error occured. Please re-run assessment.</h2>
     }
     else
     {
-        if (zeroTrustData.AppProtectionPolicy.HasAndroidPolicy)
+        <div>
+            <p>Tenant: @zeroTrustData.TenantName</p>
+            <p>Assessed by: @zeroTrustData.AssessedBy</p>
+            <p>Date assessed: @zeroTrustData.DateAssessed</p>
+        </div>
+        foreach (var bs in zeroTrustData.BusinessScenarios)
         {
-            <h3><FluentIcon Name="@FluentIcons.ShieldCheckmark" Variant=IconVariant.Filled Color="Color.Success" />Check #1: Android App Protection Policy</h3>
-            <p>Android App Protection policy was not found. Create an app protection policy to protect your corporate data on unmanaged devices.</p>
+            <h2>@bs.Name</h2>
+            foreach (var ts in bs.TechnicalScenarios)
+            {
+                <h3>@ts.Name</h3>
+                foreach (var r in ts.Recommendations)
+                {
+                    <h4>@r.Name</h4>
+                    foreach (var c in r.Checks)
+                    {
+                        <text>
+                            <h5>
+                                @if (c.Status == CheckStatus.Success)
+                                {<text>
+                                    <FluentIcon Name="@FluentIcons.ShieldCheckmark" Variant=IconVariant.Filled Color="Color.Success" />
+                                        [Passed]
+                                    </text>
         }
-        else
-        {
-            <h3><FluentIcon Name="@FluentIcons.ShieldDismiss" Variant=IconVariant.Filled Color="Color.Error" />Check #1: Android App Protection Policy</h3>
-            <p>Android App Protection policy was not found.</p>
+                                else if (c.Status == CheckStatus.Fail)
+                                {<text>
+                                    <FluentIcon Name="@FluentIcons.ShieldDismiss" Variant=IconVariant.Filled Color="Color.Error" />
+                                        [Failed]
+                                    </text>
         }
-
-        if (zeroTrustData.AppProtectionPolicy.HasIosPolicy)
-        {
-            <h3><FluentIcon Name="@FluentIcons.ShieldCheckmark" Variant=IconVariant.Filled Color="Color.Success" />Check #1: iOS App Protection Policy</h3>
-            <p>Android App Protection policy was not found. Create an app protection policy to protect your corporate data on unmanaged devices.</p>
+                                else if (c.Status == CheckStatus.NotChecked)
+                                {
+                                    <text>
+                                    <FluentIcon Name="@FluentIcons.ShieldQuestion" Variant=IconVariant.Filled Color="Color.Warning" />
+                                        [Not Checked]
+                                    </text>
         }
-        else
-        {
-            <h3><FluentIcon Name="@FluentIcons.ShieldDismiss" Variant=IconVariant.Filled Color="Color.Error" />Check #1: iOS App Protection Policy</h3>
-            <p>Android App Protection policy was found in your tenant.</p>
+                                @c.Name
+                            </h5>
+                        </text>
+                    }
+                }
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-using Assessment.Shared;
+using Assessment.Shared.ZeroTrust;
 using Assessment.Web;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
