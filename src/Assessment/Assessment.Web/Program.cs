@@ -1,3 +1,4 @@
+using Assessment.Shared;
 using Assessment.Web;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -13,6 +14,7 @@ builder.Services.AddScoped<GlobalState>();
 
 builder.Services.AddMsalAuthentication(options =>
 {
+    options.ProviderOptions.DefaultAccessTokenScopes.Add("DeviceManagementApps.Read.All");
     builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
 });
 
@@ -28,4 +30,5 @@ builder.Services.AddTransient<GraphAuthorizationMessageHandler>();
 builder.Services.AddHttpClient("GraphAPI", client => client.BaseAddress = new Uri(graphBaseUrl))
     .AddHttpMessageHandler<GraphAuthorizationMessageHandler>();
 
+builder.Services.AddScoped<IZeroTrustDataService, ZeroTrustDataService>();
 await builder.Build().RunAsync();
