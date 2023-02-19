@@ -15,6 +15,7 @@ builder.Services.AddScoped<GlobalState>();
 builder.Services.AddMsalAuthentication(options =>
 {
     options.ProviderOptions.DefaultAccessTokenScopes.Add("DeviceManagementApps.Read.All");
+    options.ProviderOptions.DefaultAccessTokenScopes.Add("Directory.Read.All");
     builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
 });
 
